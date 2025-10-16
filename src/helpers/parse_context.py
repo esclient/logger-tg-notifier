@@ -1,11 +1,12 @@
 import json
+
 from .escape_markdown_v2 import escape_md_v2
 
 
 def parse_context(data: dict) -> str:
     if not data:
         return "```json\n{}\n```"
-    
+
     try:
         formatted_json = json.dumps(data, indent=2, ensure_ascii=False)
         escaped_json = escape_md_v2(formatted_json)

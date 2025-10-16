@@ -1,1 +1,0 @@
-# makes 'endpoints' a proper package

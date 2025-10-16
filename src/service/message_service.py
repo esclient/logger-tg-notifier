@@ -1,7 +1,7 @@
 from bot.telegram_bot import TelegramBot
-from settings import Settings
-from helpers.parse_context import parse_context
 from helpers.escape_markdown_v2 import escape_md_v2
+from helpers.parse_context import parse_context
+from settings import Settings
 
 
 class MessageService:
@@ -16,17 +16,17 @@ class MessageService:
         filename = data.get("filename", "Не указано")
         fileline = data.get("fileline", "Не указано")
         error_level = data.get("error_level", "Не указано")
-        context = parse_context(data.get("context", { }))
-        traceback = data.get("traceback", { })
+        context = parse_context(data.get("context", {}))
+        traceback = data.get("traceback", {})
 
         full_message = (
-                f"\\[\\] Ошибка в сервисе: {escape_md_v2(service_name)}\n"
-                f"\\[\\] Текст ошибки: {escape_md_v2(message)}\n"
-                f"\\[\\] Дата и время: {escape_md_v2(timestamp)}\n"
-                f"\\[\\] Файл: {escape_md_v2(filename)} \\| Строка: {fileline}\n"
-                f"\\[\\] Уровень: {escape_md_v2(error_level)}\n"
-                f"\\[\\] Контекст:\n{context}"
-                )
+            f"\\[\\] Ошибка в сервисе: {escape_md_v2(service_name)}\n"
+            f"\\[\\] Текст ошибки: {escape_md_v2(message)}\n"
+            f"\\[\\] Дата и время: {escape_md_v2(timestamp)}\n"
+            f"\\[\\] Файл: {escape_md_v2(filename)} \\| Строка: {fileline}\n"
+            f"\\[\\] Уровень: {escape_md_v2(error_level)}\n"
+            f"\\[\\] Контекст:\n{context}"
+        )
 
         try:
             await self.bot.send_document_with_message(traceback, full_message)
@@ -35,5 +35,8 @@ class MessageService:
 
         return {
             "status": "ok",
-            "sent_to": { "chat_id": self.settings.CHAT_ID, "thread_id": self.settings.THREAD_ID }
+            "sent_to": {
+                "chat_id": self.settings.CHAT_ID,
+                "thread_id": self.settings.THREAD_ID,
+            },
         }

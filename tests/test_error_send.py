@@ -1,10 +1,11 @@
 import asyncio
-import aiohttp
 import traceback
 from datetime import datetime
 
+import aiohttp
 
-async def send_test_error(): 
+
+async def send_test_error():
     try:
         some_var = float("str")
     except Exception as e:
@@ -23,16 +24,13 @@ async def send_test_error():
             "user_id": 12345,
             "action": "process_payment",
             "environment": "testing",
-            "additional_data": {
-                "amount": 100.50,
-                "currency": "USD"
-            }
+            "additional_data": {"amount": 100.50, "currency": "USD"},
         },
-        "traceback": tb
+        "traceback": tb,
     }
 
     url = "http://localhost:7009/log"
-    
+
     try:
         async with aiohttp.ClientSession() as session:
             async with session.post(url, json=error_data) as response:
@@ -42,15 +40,16 @@ async def send_test_error():
     except Exception as e:
         print(f"Ошибка при отправке: {e}")
         return None
-    
+
+
 async def main():
     print("Тест запущен. Ожидание 5 секунд перед отправкой ошибки...")
-    
+
     await asyncio.sleep(5)
-    
+
     print("Отправляю тестовую ошибку...")
     result = await send_test_error()
-    
+
     if result and result.get("status") == "ok":
         print("Тест завершен успешно! Ошибка отправлена в Telegram.")
     else:
