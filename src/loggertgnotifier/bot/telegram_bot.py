@@ -1,21 +1,27 @@
 import io
 import json
+from typing import Any
 
 from telegram.constants import ParseMode
 from telegram.ext import Application
 
-from settings import Settings
+from loggertgnotifier.settings import Settings
 
 
 class TelegramBot:
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.application = Application.builder().token(self.settings.TOKEN).build()
+        self.application = (
+            Application.builder().token(self.settings.TOKEN).build()
+        )
         self.bot = self.application.bot
 
     async def send_document_with_message(
-        self, document: any, message: str, parse_mode: str = ParseMode.MARKDOWN_V2
-    ):
+        self,
+        document: Any,
+        message: str,
+        parse_mode: str = ParseMode.MARKDOWN_V2,
+    ) -> None:
         json_bytes = json.dumps(document, indent=4).encode("utf-8")
         raw_error = io.BytesIO(json_bytes)
         raw_error.name = "raw_error.txt"

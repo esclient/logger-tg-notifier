@@ -1,18 +1,21 @@
 import asyncio
 import traceback
 from datetime import datetime
+from typing import Any, cast
 
 import aiohttp
 
 
-async def send_test_error():
+async def send_test_error() -> dict[str, Any] | None:
     try:
-        some_var = float("str")
-    except Exception as e:
-        error = e
+        _ = float("str")
+    except Exception as exc:
+        error = exc
         tb = traceback.format_exc()
+    else:
+        return None
 
-    error_data = {
+    error_data: dict[str, Any] = {
         "service_name": "test-service",
         "message": str(error),
         "timestamp": datetime.now().isoformat(),
@@ -32,28 +35,30 @@ async def send_test_error():
     url = "http://localhost:7009/log"
 
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.post(url, json=error_data) as response:
-                result = await response.json()
-                print(f"Ответ от сервера: {result}")
-                return result
-    except Exception as e:
-        print(f"Ошибка при отправке: {e}")
+        async with (
+            aiohttp.ClientSession() as session,
+            session.post(url, json=error_data) as response,
+        ):
+            result = cast(dict[str, Any], await response.json())
+            print(f"Server response: {result}")
+            return result
+    except Exception as exc:
+        print(f"Failed to send error: {exc}")
         return None
 
 
-async def main():
-    print("Тест запущен. Ожидание 5 секунд перед отправкой ошибки...")
+async def main() -> None:
+    print("Waiting 5 seconds before sending the test error...")
 
     await asyncio.sleep(5)
 
-    print("Отправляю тестовую ошибку...")
+    print("Sending test error...")
     result = await send_test_error()
 
     if result and result.get("status") == "ok":
-        print("Тест завершен успешно! Ошибка отправлена в Telegram.")
+        print("Test error processed successfully! Telegram notification sent.")
     else:
-        print("Тест завершен с ошибкой.")
+        print("Test error request failed.")
 
 
 if __name__ == "__main__":

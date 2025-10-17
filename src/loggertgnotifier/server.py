@@ -1,13 +1,13 @@
 import uvicorn
 from fastapi import APIRouter, FastAPI
 
-from bot.telegram_bot import TelegramBot
-from endpoints.health_endpoint import health_check
-from endpoints.log_endpoint import receive_post
-from service.message_service import MessageService
-from settings import Settings
+from loggertgnotifier.bot.telegram_bot import TelegramBot
+from loggertgnotifier.endpoints.health_endpoint import health_check
+from loggertgnotifier.endpoints.log_endpoint import receive_post
+from loggertgnotifier.service.message_service import MessageService
+from loggertgnotifier.settings import Settings
 
-settings = Settings()
+settings: Settings = Settings()
 
 
 def create_app() -> FastAPI:
@@ -25,11 +25,13 @@ def create_app() -> FastAPI:
     return app
 
 
-app = create_app()
+app: FastAPI = create_app()
 
 
-def main():
-    uvicorn.run("server:app", host=settings.HOST, port=settings.PORT, reload=True)
+def main() -> None:
+    uvicorn.run(
+        "server:app", host=settings.HOST, port=settings.PORT, reload=True
+    )
 
 
 if __name__ == "__main__":
