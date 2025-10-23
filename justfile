@@ -1,3 +1,6 @@
+run:
+    pdm run run-server
+
 format:
     black .
     isort .

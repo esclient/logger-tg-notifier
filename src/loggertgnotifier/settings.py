@@ -12,6 +12,6 @@ class Settings(BaseSettings):
 
     TOKEN: str = Field(validation_alias="TG_BOT_TOKEN")
     CHAT_ID: str = Field(validation_alias="TG_CHAT_ID")
-    THREAD_ID: int | None = Field(None, validation_alias="TG_THREAD_ID")
+    THREAD_ID: int = Field(validation_alias="TG_THREAD_ID")
     HOST: str = Field(validation_alias="HOST")
     PORT: int = Field(validation_alias="PORT")

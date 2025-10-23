@@ -30,7 +30,10 @@ app: FastAPI = create_app()
 
 def main() -> None:
     uvicorn.run(
-        "server:app", host=settings.HOST, port=settings.PORT, reload=True
+        "loggertgnotifier.server:app",
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=True,
     )
 
 
