@@ -15,3 +15,4 @@ class Settings(BaseSettings):
     THREAD_ID: int = Field(validation_alias="TG_THREAD_ID")
     HOST: str = Field(validation_alias="HOST")
     PORT: int = Field(validation_alias="PORT")
+    PROXY_URL: str | None = Field(default=None, validation_alias="PROXY_URL")

@@ -11,9 +11,13 @@ from loggertgnotifier.settings import Settings
 class TelegramBot:
     def __init__(self, settings: Settings):
         self.settings = settings
-        self.application = (
-            Application.builder().token(self.settings.TOKEN).build()
-        )
+        builder = Application.builder().token(self.settings.TOKEN)
+
+        proxy_url = self.settings.PROXY_URL
+        if proxy_url:
+            builder = builder.proxy(proxy_url).get_updates_proxy(proxy_url)
+
+        self.application = builder.build()
         self.bot = self.application.bot
 
     async def send_document_with_message(
